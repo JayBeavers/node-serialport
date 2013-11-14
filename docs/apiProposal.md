@@ -9,12 +9,12 @@
 			port.product.search('firmata') > -1);
 	
 		if (firmataArduinos.length) {
-			var serialPort = firmataArduinos[0].open( { baudrate: '57600' } );
-
-			serialPort.on('error', console.error);
-			serialPort.on('data', console.log);
-
-			serialPort.write('hello, serialPort');
+			var serialPort = firmataArduinos[0].open( { baudrate: '57600' }, function(err) {
+				serialPort.on('error', console.error);
+				serialPort.on('data', console.log);
+	
+				serialPort.write('hello, serialPort');
+			});
 		}
 	});
 	
@@ -28,11 +28,11 @@
 			port.product.search('firmata') > -1);
 	
 		if (firmataArduinos.length) {
-			var serialPort = firmataArduinos[0].open( { baudrate: '57600' } );
+			var serialPort = firmataArduinos[0].open( { baudrate: '57600' } ).then( _ => {
 
-			serialPort.on('error', console.error);
-			serialPort.on('data', console.log);
-
-			serialPort.write('hello, serialPort');
-		})
-		.catch(console.error);
+				serialPort.on('error', console.error);
+				serialPort.on('data', console.log);
+	
+				serialPort.write('hello, serialPort');
+			}).catch(console.error);
+		}).catch(console.error);
