@@ -2,13 +2,18 @@
 
 	var serialPortFactory = require('serialport');
 	
-	var serialPort;
+	serialPortFactory.on('error', console.error);
 	serialPortFactory.list(ports =>	{
 		var firmataArduinos = ports.filter(port =>
-				port.manufacturer.search('arduino') > -1
-				&& port.product.search('firmata');
+				port.manufacturer.search('arduino') > -1 &&
+				port.product.search('firmata') > -1;
 	
 		if (firmataArduinos.length) {
-			serialPort = firmataArduinos[0].open( { baudrate: '57600' } );
+			var serialPort = firmataArduinos[0].open( { baudrate: '57600' } );
+
+			serialPort.on('error', console.error);
+			serialPort.on('data', console.log);
+
+			serialPort.write('hello, serialPort');
 		}
 	});
